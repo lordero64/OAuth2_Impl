@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Админ-панель</title>
+    <style>
+        body { font-family: Arial; max-width: 800px; margin: 50px auto; padding: 20px; }
+        .admin-card { border: 1px solid #ddd; padding: 20px; border-radius: 10px; background: #f8f9fa; }
+        button { background: #6c757d; color: white; padding: 8px 16px; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+    <script>
+        async function checkAccess() {
+            const response = await fetch('/api/user');
+            const user = await response.json();
+
+            if (!user.isAdmin) {
+                window.location.href = '/user.html?error=access_denied';
+            }
+        }
+
+        checkAccess();
+    </script>
+</head>
+<body>
+<div class="admin-card">
+    <h1>⚙️ Административная панель</h1>
+    <p>Добро пожаловать! Это защищенная страница.</p>
+    <button onclick="window.location.href='/user.html'">← Вернуться в профиль</button>
+</div>
+</body>
+</html>

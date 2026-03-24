@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль</title>
+    <style>
+        body {
+            font-family: Arial;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .avatar {
+            width: 100px;
+            border-radius: 50%;
+        }
+
+        .admin-badge {
+            background: red;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+
+        .user-badge {
+            background: green;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+
+        button {
+            background: #dc3545;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        async function loadProfile() {
+            const response = await fetch('/api/user');
+            const user = await response.json();
+
+            document.getElementById('login').textContent = user.login || '—';
+            document.getElementById('name').textContent = user.name || '—';
+            document.getElementById('avatar').src = user.avatarUrl || '';
+
+            const roleSpan = document.getElementById('role');
+            if (user.isAdmin) {
+                roleSpan.textContent = 'ADMIN';
+                roleSpan.className = 'admin-badge';
+                document.getElementById('adminLink').style.display = 'inline-block';
+            } else {
+                roleSpan.textContent = 'USER';
+                roleSpan.className = 'user-badge';
+            }
+        }
+
+        async function logout() {
+            await fetch('/logout', {method: 'POST'});
+            window.location.href = '/index.html';
+        }
+
+        loadProfile();
+    </script>
+</head>
+<body>
+<h1>👤 Мой профиль</h1>
+<img id="avatar" class="avatar">
+<p><strong>Login:</strong> <span id="login"></span></p>
+<p><strong>Имя:</strong> <span id="name"></span></p>
+<p><strong>Роль:</strong> <span id="role"></span></p>
+
+<div>
+    <a id="adminLink" href="/admin.html" style="display: none; margin-right: 10px;">⚙️ Админ-панель</a>
+    <button onclick="logout()">🚪 Выйти</button>
+</div>
+</body>
+</html>
